@@ -44,10 +44,10 @@ const ProjecList = () => {
   }
   return (
     <>
-    <div className='relative px-5 lg:px-0 lg:flex gap-5 justify-center py-5 text-shadow-amber-50 mt-20'>
+    <div className='relative px-5 lg:px-0 lg:flex gap-5 justify-center py-5 text-shadow-amber-50 "bg-[#0b1120]/90'>
 
-    <section className='filterSection'>
-      <Card className="p-5 sticky top-10 bg-zinc-900 text-shadow-white">
+    <section className='filterSection bg-[#0b1120]/90'>
+      <Card className="p-5 sticky top-10 bg-[#0b1120]/90 text-shadow-white">
         <div className='flex justify-between lg:w-[20rem]'>
           <p className='text-xl text-white -tracking-wider'>Filters</p>
 
@@ -143,7 +143,7 @@ const ProjecList = () => {
 
 
     <div>
-      <div className='space-y-5 min-h[74vh] text-white'>
+      <div className='bg-[#0b1120]/90 space-y-5 min-h[74vh] text-white'>
         {
           keywords?[1,1,1].map((item)=>
           <ProjectCard key={item} />)
