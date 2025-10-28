@@ -1,0 +1,27 @@
+.border-line {
+  position: absolute;
+  inset: 0;
+  border: 2px solid transparent;
+  border-radius: 1rem; /* match card border-radius */
+  background: linear-gradient(90deg, #00fff7, #ff00ff, #00fff7, #ff00ff);
+  background-size: 200% 200%;
+  z-index: 10;
+  pointer-events: none;
+
+  /* Animate the gradient around the border */
+  animation: moveBorder 2s linear infinite;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+}
+
+@keyframes moveBorder {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 200% 0%;
+  }
+}

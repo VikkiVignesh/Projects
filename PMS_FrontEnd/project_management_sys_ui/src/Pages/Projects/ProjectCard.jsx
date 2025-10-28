@@ -33,11 +33,11 @@ const nav=useNavigate()
                     <div>
                         <DropdownMenu>
                             <DropdownMenuTrigger>
-                                <Button>
+                                <Button className="bg-[#0b1120]/90" >
                                     <DotsVerticalIcon className=' rounded-full text-white' variant="ghost" />
                                 </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-zinc-900 text-white">
+                            <DropdownMenuContent className="bg-[#0b1120]/90 text-white">
                                 <DropdownMenuItem>
                                     Update
                                 </DropdownMenuItem>

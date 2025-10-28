@@ -33,7 +33,10 @@ const IssueList = ({title,status}) => {
                </CardHeader>
                <CardContent className="px-2 bg-[#0b1120]/90">
                 <div className='space-y-2'>
-                    <IssuesCard />
+                    {
+                      [1,1,1].map((item)=>
+                      <IssuesCard key={item} />)
+                    }
                 </div>
                </CardContent>
                <CardFooter>
@@ -45,6 +48,9 @@ const IssueList = ({title,status}) => {
                             Create Issue
                         </Button>
                     </DialogTrigger>
+                    <DialogContent className="bg-[#0b1120]/90">
+                      <CreateIssueForm/>
+                    </DialogContent>
                 </Dialog>
                 
                </CardFooter>

@@ -2,6 +2,7 @@ import React from "react"
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { Navigate, useNavigate } from "react-router-dom"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,11 +13,12 @@ import { DotsVerticalIcon, PersonIcon } from "@radix-ui/react-icons"
 import UserList from "./UserList"
 
 const IssuesCard = () => {
+  const navigate=useNavigate();
   return (
     <Card className="w-full max-w-sm bg-[#0b1120]/80 border border-gray-700 text-white shadow-md hover:shadow-lg transition-all rounded-lg p-3">
       {/* Header */}
       <CardHeader className="flex flex-row items-center justify-between p-0">
-        <CardTitle className="text-base font-semibold">Create Navbar</CardTitle>
+        <CardTitle className="cursor-pointer text-base font-semibold" onClick={()=>navigate("/project/3/issue/3")} >Create Navbar</CardTitle>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

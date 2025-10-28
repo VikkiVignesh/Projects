@@ -133,12 +133,11 @@ const ProjectDetails = () => {
 
           </div>
         </ScrollArea>
-        <div>
-         <ChatBox/>
-        </div>
 
         {/* Optional Right Sidebar */}
-        <div className="hidden lg:block lg:w-[28%]"></div>
+        <div className=" lg:block lg:w-[30%]">
+          <ChatBox/>
+        </div>
       </div>
     </div>
   )
