@@ -1,8 +1,12 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import {useDispatch} from "react-redux"
+import {registerUser} from "../../redux/Auth/Action"
+
 
 const Register = ({ toggleForm }) => {
+  const dispatch=useDispatch()
   const {
     register,
     handleSubmit,
@@ -13,6 +17,7 @@ const Register = ({ toggleForm }) => {
   const onSubmit = (data) => {
     console.log("Register Data:", data);
     // handle registration logic here
+    dispatch(registerUser(data));
   };
 
   const password = watch("password");
@@ -29,10 +34,10 @@ const Register = ({ toggleForm }) => {
       <input
         type="text"
         placeholder="Full Name"
-        {...register("fullName", { required: "Full name is required" })}
+        {...register("name", { required: "User Name is required" })}
         className="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition"
       />
-      {errors.fullName && (
+      {errors.name && (
         <p className="text-red-400 text-sm mt-1">{errors.fullName.message}</p>
       )}
 
@@ -42,7 +47,7 @@ const Register = ({ toggleForm }) => {
         {...register("email", {
           required: "Email is required",
           pattern: {
-            value: /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/,
+            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
             message: "Enter a valid email",
           },
         })}

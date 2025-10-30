@@ -12,23 +12,34 @@ import {
 import { Button } from '../../components/ui/button'
 import { Badge } from "@/components/ui/badge"
 import {useNavigate} from "react-router-dom"
+import { useDispatch } from 'react-redux'
+import { deleteProject } from '../../redux/projects/ProjecActions'
 
 
-const ProjectCard = () => {
+const ProjectCard = ({project}) => {
 
+const dispatch=useDispatch();
+const handleProjectDelete=()=>
+{
+    dispatch(deleteProject({ projectId: project.id }))
+}
 const nav=useNavigate()
+
+
+
+
   return (
     <Card className="p-5 w-full lg:max-w-3xl bg-[#0b1120]/90 text-white" >
        <div className='space-y-5'>
             <div className='space-y-2'>
                 <div className='flex justify-between'>
                     <div className='flex items-center gap-5'>
-                        <h1 onClick={()=>nav("/project/3")} className='cursor-pointer font-bold text-lg'>
-                            Create Ecomerce Project
+                        <h1 onClick={()=>nav(`/project/${project.id}`)} className='cursor-pointer font-bold text-lg'>
+                            {project.name}
                         </h1>
 
                         <DotFilledIcon/>
-                        <p className="text-sm text-gray-400">Tech Stack</p>
+                        <p className="text-sm text-gray-400">{project.category}</p>
                     </div>
                     <div>
                         <DropdownMenu>
@@ -42,7 +53,7 @@ const nav=useNavigate()
                                     Update
                                 </DropdownMenuItem>
 
-                                <DropdownMenuItem>
+                                <DropdownMenuItem onClick={handleProjectDelete} >
                                     Delete
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -50,16 +61,16 @@ const nav=useNavigate()
                     </div>
                 </div>
                 <p className='text-gray-400 text-sm'>
-                    Description comes here
+                    {project.description}
                 </p>
 
             </div>
 
             <div className='flex flex-wrap gap-2 items-center text-gray-200'>
                 {
-                    [1,1,1,1].map((item)=>
-                    <Badge key={item} className="text-gray-300" variant="outline">
-                     Frontend
+                    project.tags.map((tag)=>
+                    <Badge key={tag} className="text-gray-300" variant="outline">
+                     {tag}
                     </Badge>
                 )
                 }

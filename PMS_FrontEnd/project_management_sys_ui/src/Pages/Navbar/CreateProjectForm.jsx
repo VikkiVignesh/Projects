@@ -18,9 +18,12 @@ import { useForm } from "react-hook-form";
 import{DialogClose} from "@/components/ui/dialog"
 import { tags } from "../Projects/ProjecList";
 import { Cross1Icon } from "@radix-ui/react-icons";
+import { useDispatch, useSelector } from 'react-redux'
+import { createProject, fetchProjects } from "../../redux/projects/ProjecActions";
 
 const CreateProjectForm = () => {
   
+  const dispatch=useDispatch();
     const form = useForm({
     defaultValues: {
       name: "",
@@ -32,6 +35,8 @@ const CreateProjectForm = () => {
 
   const onSubmit = (data) => {
     console.log("✅ Project Created:", data);
+    dispatch(createProject({ projectData: data }))
+     .then(()=> dispatch(fetchProjects({})))
   };
 
   const handleTagsChange=(newValue)=>

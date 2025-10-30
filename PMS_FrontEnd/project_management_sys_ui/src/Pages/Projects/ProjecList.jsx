@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -15,6 +15,9 @@ import { Button } from '../../components/ui/button'
 import { MagnifyingGlassIcon, MixerHorizontalIcon } from '@radix-ui/react-icons';
 import { Input } from "@/components/ui/input"
 import ProjectCard from './ProjectCard'
+import { useDispatch, useSelector } from 'react-redux'
+import { store } from '../../redux/Store'
+import { fetchProjects, searchProject } from '../../redux/projects/ProjecActions'
 
 
 export const tags=[
@@ -33,15 +36,54 @@ export const tags=[
 const ProjecList = () => {
 
   const [keywords,setKeywords]=useState("")
+  const dispatch=useDispatch()
 
-  const handleFilterChange=(section,value)=>{
-    console.log("Value: ",value)
+  const {project}=useSelector(store=>store)
+  console.log("All projects of User",project.projects)
+          
+
+ 
+
+  const handleFilterCategory=(val)=>
+  {
+    console.log("Category "+val+" filter selected");
+    if(val!=="all")
+    {
+      dispatch(fetchProjects({category:val}))
+    }
+    else
+    {
+      dispatch(fetchProjects({}))
+    }
+    
+  }
+
+  const handleFilterTags=(val)=>
+  {
+    if(val!="all"){
+       dispatch(fetchProjects({tag:val}))
+    }
+    else
+    {
+      dispatch(fetchProjects({}))
+    }
+    console.log("Tags "+val+" filter selected");
+    
   }
 
   const handleSearchChange=(e)=>
   {
     setKeywords(e.target.value) 
   }
+
+   useEffect(() => {
+    if (keywords.trim() !== "") {
+      dispatch(searchProject({ keyword: keywords }));
+    }
+  }, [keywords, dispatch]);
+
+  const filteredProjects =
+    keywords.trim() !== "" ? project.searchProjects : project.projects;
   return (
     <>
     <div className='relative px-5 lg:px-0 lg:flex gap-5 justify-center py-5 text-shadow-amber-50 "bg-[#0b1120]/90'>
@@ -66,7 +108,7 @@ const ProjecList = () => {
               </h1>
 
               <div className='pt-5'>
-                <RadioGroup className="text-white" defaultValue="all" onValueChange={(val)=>handleFilterChange("category",val)}>
+                <RadioGroup className="text-white" defaultValue="all" onValueChange={(val)=>handleFilterCategory(val)}>
                   <div className='flex items-center gap-2'>
                     <RadioGroupItem value="all" id="r1"
                     className="border-white text-white transition-colors duration-200 data-[state=checked]:bg-white data-[state=checked]:text-black"
@@ -103,7 +145,7 @@ const ProjecList = () => {
               </h1>
 
               <div className='pt-5'>
-                <RadioGroup className="text-white" defaultValue="all" onValueChange={(val)=>handleFilterChange("category",val)}>
+                <RadioGroup className="text-white" defaultValue="all" onValueChange={(val)=>handleFilterTags(val)}>
                   {
                     tags.map((item)=>
                     <div key={item} className='flex items-center gap-2'>
@@ -144,13 +186,13 @@ const ProjecList = () => {
 
     <div>
       <div className='bg-[#0b1120]/90 space-y-5 min-h[74vh] text-white'>
-        {
-          keywords?[1,1,1].map((item)=>
-          <ProjectCard key={item} />)
-          :
-          [1,1,1,4].map((item)=> <ProjectCard key={item}/>
-          )
-        }
+        {filteredProjects?.length > 0 ? (
+            filteredProjects.map((proj) => (
+              <ProjectCard key={proj.id} project={proj} />
+            ))
+          ) : (
+            <p className="text-gray-400">No projects found.</p>
+          )}
       </div>
     </div>
 

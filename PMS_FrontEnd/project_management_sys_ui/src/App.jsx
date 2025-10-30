@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import './index.css'
 import { Button } from "@/components/ui/button"
 import Home from './Pages/Home/Home'
@@ -10,17 +10,35 @@ import Subscription from './Pages/Upgrades/Subscription'
 import Auth from './Pages/Auth/Auth'
 import Login from './Pages/Auth/Login'
 import Register from './Pages/Auth/Register'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUser } from './redux/Auth/Action'
+import { store } from './redux/Store'
+import { fetchProjects } from './redux/projects/ProjecActions'
+
 
 
 
 
 function App() {
+
+  const dispatch=useDispatch();
+
+  const {auth}=useSelector(store=>store)
+
+
+  useEffect(()=>{
+    dispatch(getUser())
+    dispatch(fetchProjects({}))
+  }
+  ,[auth.jwt])
+
+  console.log(auth)
   
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
     <>
-      {isAuthenticated ? (
+      {
+      auth.user ? (
         <div>
           <Navbar />
           <main className="pt-6">
@@ -28,7 +46,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/project/:id" element={<ProjectDetails />} />
               <Route
-                path="/project/:proj_id/issue/:issue_id"
+                path="/project/:projectId/issue/:issueId"
                 element={<IssueDetails />}
               />
               <Route path="/upgrade_plan" element={<Subscription />} />

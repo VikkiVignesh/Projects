@@ -11,14 +11,26 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { DotsVerticalIcon, PersonIcon } from "@radix-ui/react-icons"
 import UserList from "./UserList"
+import { useDispatch } from "react-redux"
+import { assignUserToIssue, deleteIssue } from "../../redux/Issue/IssueAction"
 
-const IssuesCard = () => {
+const IssuesCard = ({item,projectId}) => {
   const navigate=useNavigate();
+
+  const dispatch=useDispatch();
+
+  console.log("IssueCard Items",item);
+  
+ 
+  const handleIssueDelete=()=>
+  {
+    dispatch(deleteIssue(item.id))
+  }
   return (
     <Card className="w-full max-w-sm bg-[#0b1120]/80 border border-gray-700 text-white shadow-md hover:shadow-lg transition-all rounded-lg p-3">
       {/* Header */}
       <CardHeader className="flex flex-row items-center justify-between p-0">
-        <CardTitle className="cursor-pointer text-base font-semibold" onClick={()=>navigate("/project/3/issue/3")} >Create Navbar</CardTitle>
+        <CardTitle className="cursor-pointer text-base font-semibold" onClick={()=>navigate(`/project/${projectId}/issue/${item.id}`)} >{item.title}</CardTitle>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -34,7 +46,7 @@ const IssuesCard = () => {
             <DropdownMenuItem>Edit</DropdownMenuItem>
             <DropdownMenuItem>In Progress</DropdownMenuItem>
             <DropdownMenuItem>Done</DropdownMenuItem>
-            <DropdownMenuItem className="text-red-400 hover:text-red-500">
+            <DropdownMenuItem className="text-red-400 hover:text-red-500" onClick={handleIssueDelete} >
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -54,14 +66,14 @@ const IssuesCard = () => {
             >
               <Avatar className="w-8 h-8">
                 <AvatarFallback className="bg-gray-600 text-gray">
-                  <PersonIcon className="w-4 h-4" />
+                 {item.assignee?  item.assignee.name[0] :<PersonIcon className="w-4 h-4" />}
                 </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
 
           <DropdownMenuContent className="bg-[#0b1120]/95 text-white  border-gray-700 rounded-md">
-            <UserList/>
+            <UserList issueDetails={item}/>
           </DropdownMenuContent>
         </DropdownMenu>
       </CardContent>

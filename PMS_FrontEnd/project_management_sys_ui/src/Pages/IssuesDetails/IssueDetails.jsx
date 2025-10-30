@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CreateCommentForm from "./CreateCommentForm";
@@ -12,30 +12,51 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchIssueById, updateIssueStatus } from "../../redux/Issue/IssueAction";
+import { store } from "../../redux/Store";
+
 
 const IssueDetails = () => {
   const [comments, setComments] = useState([]);
-  const [issueId] = useState("123"); // example issueId
+  
 
+  const {projectId,issueId}=useParams();
+
+  console.log("Project ID:", projectId, "Issue ID:", issueId);
+
+  const dispatch=useDispatch();
+
+  const navigate=useNavigate();
   const handleUpdateIssueStatus=(status)=>
   {
     console.count(status)
+    dispatch(updateIssueStatus({ id:issueId, status }))
   }
 
+  const {issue}=useSelector(store=>store)
+
+
+ 
+  useEffect(()=>
+  {
+    dispatch(fetchIssueById(issueId))
+  },[issueId])
+
   return (
-    <div className="px-20 py-8 text-gray-400">
+    <div className="px-20 py-8 text-gray-400 bg-[#0b1120]/90">
       <div className="flex justify-between border p-10 rounded-lg">
         <ScrollArea className="h-[65vh] w-[60%] text-gray-200">
           <div>
-            <h1 className="text-lg font-semibold text-white">Create Navbar</h1>
+            <h1 className="text-lg font-semibold text-white cursor-pointer" onClick={()=>navigate(`/project/${projectId}`)} >
+              {issue.issueDetails?.title}
+            </h1>
 
             <div className="py-5">
               <h2 className="font-semibold text-gray-400">Description:</h2>
               <p className="text-gray-400 text-sm mt-2">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Nihil odio molestiae inventore minima voluptate exercitationem
-                aspernatur blanditiis soluta beatae debitis maiores at explicabo
-                nulla delectus ducimus, consequatur quos, numquam nesciunt!
+              {issue.issueDetails?.description}  
               </p>
             </div>
 
@@ -106,12 +127,16 @@ const IssueDetails = () => {
                     <div className="space-y-7">
                         <div className="flex gap-10 items-center">
                             <p className="w-[7rem]">Assignee</p>
-                            <div className="bg-[#0b1120]/90 flex gap-2 items-center">
+                            {
+                              issue.issueDetails?.assignee?
+                              <div className="bg-[#0b1120]/90 flex gap-2 items-center">
                                  <Avatar className="h-8 w-8 text-xs">
-                                    <AvatarFallback className="bg-gray-600">V</AvatarFallback>
+                                    <AvatarFallback className="bg-gray-600">{issue.issueDetails?.assignee[0].toUpperCase()}</AvatarFallback>
                                 </Avatar>
-                                <p>Vikki</p>
-                            </div>
+                                <p>{issue.issueDetails?.assignee}</p>
+                            </div>:
+                            <p>Un-Assigned</p>
+                            }
                         </div>
 
                          <div className="flex gap-10 items-center">
@@ -121,12 +146,12 @@ const IssueDetails = () => {
 
                          <div className="flex gap-10 items-center">
                             <p className="w-[7rem]">Status</p>
-                            <Badge className="bg-amber-400 text-black font-semibold" >in_progress</Badge>
+                            <Badge className="bg-amber-400 text-black font-semibold" >{issue.issueDetails?.status}</Badge>
                         </div>
 
                         <div className="flex gap-10 items-center">
                             <p className="w-[7rem]">Realese</p>
-                            <p>19-03-2025</p>
+                            <p>{issue.issueDetails?.dueDate}</p>
                         </div>
 
                          <div className="flex gap-10 items-center">
@@ -135,7 +160,7 @@ const IssueDetails = () => {
                                  <Avatar className="h-8 w-8 text-xs">
                                     <AvatarFallback className="bg-gray-600">V</AvatarFallback>
                                 </Avatar>
-                                <p>Vikki</p>
+                                <p>{}</p>
                             </div>
                         </div>
 

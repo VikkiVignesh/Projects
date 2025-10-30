@@ -1,17 +1,31 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { useDispatch } from "react-redux";
+
+import { useNavigate } from "react-router-dom";
+import { loginUser } from "../../redux/Auth/Action";
 
 const Login = ({ toggleForm }) => {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit =(data) => {
     console.log("Login Data:", data);
     // handle login logic here
+    try {
+      dispatch(loginUser(data)); // trigger backend call
+      navigate("/"); // ✅ redirect to your main screen (change path as needed)
+    } catch (error) {
+      console.log("Login failed:", error);
+    }
   };
 
   return (
@@ -29,7 +43,7 @@ const Login = ({ toggleForm }) => {
           {...register("email", {
             required: "Email is required",
             pattern: {
-              value: /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/,
+              value:/^[^\s@]+@[^\s@]+\.[^\s@]+$/,
               message: "Enter a valid email",
             },
           })}
