@@ -29,7 +29,6 @@ public class Issues {
     private LocalDate dueDate;
     private List<String> tags=new ArrayList<>();
 
-
     @JsonIgnore
     @ManyToOne()
     private Users assignee;

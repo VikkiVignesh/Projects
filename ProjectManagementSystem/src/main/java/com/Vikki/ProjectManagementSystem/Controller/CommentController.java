@@ -60,9 +60,21 @@ public class CommentController {
 
 
     @GetMapping("/{issueId}")
-    public ResponseEntity<List<Comment>> getCommentsByIssueId(@PathVariable Long issueId)
+    public ResponseEntity<List<CommentDto>> getCommentsByIssueId(@PathVariable Long issueId)
     {
-        List<Comment> comments=commentService.findCommentByIssueId(issueId);
-        return  ResponseEntity.ok(comments);
+        List<Comment> comments = commentService.findCommentByIssueId(issueId);
+
+        // Convert to DTOs (with minimal user info)
+        List<CommentDto> commentDtos = comments.stream().map(comment -> {
+            Users user = comment.getUser();
+            UserMiniDto userDto = new UserMiniDto(user.getId(), user.getName(), user.getEmail());
+            return new CommentDto(
+                    comment.getId(),
+                    comment.getContent(),
+                    comment.getCreatedDateTime().toString(),
+                    userDto
+            );
+        }).toList();
+        return  ResponseEntity.ok(commentDtos);
     }
 }

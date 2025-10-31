@@ -83,7 +83,7 @@ public class CommentServiceImpl implements CommentService{
         }
         else
         {
-            throw new Exception("User Does not have permission to delet this comment..");
+            throw new Exception("User Does not have permission to delete this comment..");
         }
     }
 

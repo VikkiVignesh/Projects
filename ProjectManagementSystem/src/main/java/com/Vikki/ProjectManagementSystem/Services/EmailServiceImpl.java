@@ -20,10 +20,22 @@ public class EmailServiceImpl implements  EmailService{
         MimeMessageHelper helper=new MimeMessageHelper(mimeMessage,"utf-8");
 
         String subject="Join Project Team Invitation";
-        String text="Click the link to join the project team"+link;
+        String text = """
+            <div style="font-family: Arial, sans-serif; font-size: 14px;">
+              <p>Hello,</p>
+              <p>You’ve been invited to join a project team. Click below to accept:</p>
+              <p>
+                <a href="%s" style="background-color:#4CAF50;color:white;padding:10px 15px;text-decoration:none;border-radius:5px;">
+                  Accept Invitation
+                </a>
+              </p>
+              <p>Or copy this link into your browser:</p>
+              <p>%s</p>
+            </div>
+            """.formatted(link, link);
 
         helper.setSubject(subject);
-        helper.setText(text);
+        helper.setText(text,true);
         helper.setTo(usrname);
 
         try

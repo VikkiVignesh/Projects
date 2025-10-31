@@ -15,7 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 public class IssueDto {
     private Long Id;
-
     private  String title;
     private String description;
     private String status;
@@ -104,5 +103,22 @@ public class IssueDto {
 
     public void setProject(ProjectMiniDto project) {
         this.project = project;
+    }
+
+
+    @Override
+    public String toString() {
+        return "IssueDto{" +
+                "Id=" + Id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", status='" + status + '\'' +
+                ", projectID=" + projectID +
+                ", priority='" + priority + '\'' +
+                ", dueDate=" + dueDate +
+                ", tags=" + tags +
+                ", assignee=" + assignee +
+                ", project=" + project +
+                '}';
     }
 }

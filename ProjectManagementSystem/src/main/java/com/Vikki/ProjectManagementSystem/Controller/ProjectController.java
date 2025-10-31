@@ -29,8 +29,8 @@ public class ProjectController {
 
     @GetMapping("/all")
     public ResponseEntity<List<Project>> getProjects(
-            @RequestBody(required = false) String category,
-            @RequestBody(required=false) String tag,
+            @RequestParam(required = false) String category,
+            @RequestParam(required=false) String tag,
             @RequestHeader("Authorization") String jwt
     ) throws Exception {
 
@@ -137,12 +137,15 @@ public class ProjectController {
 
     @GetMapping("/accept_invitation")
     public ResponseEntity<Invitation> acceptInviteProject(
-            @RequestParam String token,
-            @RequestBody Project project
+            @RequestParam String token
             ,@RequestHeader("Authorization") String jwt) throws Exception {
         Users user=userService.findUserProfileByJwt(jwt);
         Invitation invitation=invitationService.acceptInvitation(token,user.getId());
+        if (invitation.getProjectId() == null) {
+            throw new Exception("Project ID missing in invitation");
+        }
         projectService.addUserToProject(invitation.getProjectId(), user.getId());
+        invitationService.deleteToken(token);
         return  new ResponseEntity<>(invitation, HttpStatus.OK);
     }
 

@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/payment")
@@ -29,6 +26,7 @@ public class PaymentController {
     @Autowired
     private UserService userService;
 
+    @PostMapping("/{planType}")
     public ResponseEntity<PaymentLinkResponse>createPaymentLink(
             @PathVariable PlanType planType,
             @RequestHeader("Authorization") String jwt
@@ -64,7 +62,7 @@ public class PaymentController {
 
             PaymentLink paymentLink=razorpayClient.paymentLink.create(paymentLinkResponse);
 
-            paymentLinkResponse.put("callback_url","http://localhost:5173/upgrade_plan/success?planType"+planType);
+            paymentLinkResponse.put("callback_url","http://localhost:5173/upgrade_plan/success?planType="+planType);
 
             String paymentLinkId=paymentLink.get("id");
             String paymentLinkUrl=paymentLink.get("short_url");

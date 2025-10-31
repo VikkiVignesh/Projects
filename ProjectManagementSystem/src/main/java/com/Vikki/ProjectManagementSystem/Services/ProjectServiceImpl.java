@@ -100,11 +100,14 @@ public class ProjectServiceImpl implements ProjectService{
         Project project=getProjectById(projectId);
         Users user=userService.findUserById(userId);
 
-        if(!project.getTeam().contains(user))
+        for(Users member:project.getTeam())
         {
-            project.getChat().getUsers().add(user);
-            project.getTeam().add(user);
+            if(member.getId().equals(userId))
+                return;
         }
+
+        project.getChat().getUsers().add(user);
+        project.getTeam().add(user);
         projectRepo.save(project);
     }
 
@@ -131,8 +134,8 @@ public class ProjectServiceImpl implements ProjectService{
     @Override
     public List<Project> serachProjects(String keyword, Users user) throws Exception {
         String partialName="%"+keyword+"%";
-        List<Project> projects=projectRepo.findByNameContainingIgnoreCaseAndTeamContains(keyword,user);
-        return projects;
+        List<Project> listproject=projectRepo.findByNameContainingIgnoreCaseAndTeamContains(keyword,user);
+        return listproject;
     }
 
     @Override
