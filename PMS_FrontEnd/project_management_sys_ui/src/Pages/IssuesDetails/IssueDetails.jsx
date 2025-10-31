@@ -16,10 +16,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchIssueById, updateIssueStatus } from "../../redux/Issue/IssueAction";
 import { store } from "../../redux/Store";
+import { fetchComment } from "../../redux/comments/comAction";
 
 
 const IssueDetails = () => {
-  const [comments, setComments] = useState([]);
   
 
   const {projectId,issueId}=useParams();
@@ -35,13 +35,16 @@ const IssueDetails = () => {
     dispatch(updateIssueStatus({ id:issueId, status }))
   }
 
-  const {issue}=useSelector(store=>store)
+  const {issue,comment}=useSelector(store=>store)
 
+  console.log("Issues Details Issues",issue);
+                              
 
  
   useEffect(()=>
   {
     dispatch(fetchIssueById(issueId))
+     dispatch(fetchComment(issueId))
   },[issueId])
 
   return (
@@ -83,7 +86,7 @@ const IssueDetails = () => {
                 <TabsContent value="comments" className="p-4 bg-gray-800 rounded-b-lg text-gray-200">
                   <CreateCommentForm
                     issueId={issueId}
-                    onNewComment={(c) => setComments((prev) => [...prev, c])}
+                    
                   />
 
                   {/* Display comments */}
@@ -94,8 +97,8 @@ const IssueDetails = () => {
                       </div>
                     ))} */}
                     {
-                        [1,1,1].map((item)=>
-                        <CommentCard key={item}/>)
+                        comment.comments.map((item)=>
+                        <CommentCard key={item.id} comment={item}/>)
                     }
                   </div>
                 </TabsContent>
@@ -128,12 +131,12 @@ const IssueDetails = () => {
                         <div className="flex gap-10 items-center">
                             <p className="w-[7rem]">Assignee</p>
                             {
-                              issue.issueDetails?.assignee?
+                              issue.issueDetails?.assignee?.name ?
                               <div className="bg-[#0b1120]/90 flex gap-2 items-center">
                                  <Avatar className="h-8 w-8 text-xs">
-                                    <AvatarFallback className="bg-gray-600">{issue.issueDetails?.assignee[0].toUpperCase()}</AvatarFallback>
+                                    <AvatarFallback className="bg-gray-600">{issue.issueDetails?.assignee.name[0].toUpperCase()}</AvatarFallback>
                                 </Avatar>
-                                <p>{issue.issueDetails?.assignee}</p>
+                                <p>{issue.issueDetails?.assignee?.name}</p>
                             </div>:
                             <p>Un-Assigned</p>
                             }

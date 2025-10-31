@@ -30,7 +30,7 @@ const chatReducer=(state=initalState,action)=>
             return {
                 ...state,
                 loading:false,
-                messages:[...state.messages,action.messages]
+                messages:[...state.messages,action.message]
             }
         case FETCH_CHAT_BY_PROJECT_SUCCESS:
             return {

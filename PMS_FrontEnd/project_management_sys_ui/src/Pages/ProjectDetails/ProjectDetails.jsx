@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -16,11 +16,15 @@ import IssueList from "./IssueList";
 import ChatBox from "./ChatBox";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { fetch_Project_Id } from "../../redux/projects/ProjecActions";
+import { fetch_Project_Id, invite_to_Projects } from "../../redux/projects/ProjecActions";
 
 const ProjectDetails = () => {
+  
+  const [open, setOpen] = useState(false);
+
   const dispatch = useDispatch();
   const { id } = useParams();
+  console.log("Project Details ID ", id);
   const { projectDetails } = useSelector((state) => state.project || {});
   const {
     register,
@@ -32,8 +36,10 @@ const ProjectDetails = () => {
   });
 
   const onSubmit = (data) => {
+    dispatch(invite_to_Projects(data.email,id))
     console.log("Invite sent to:", data.email);
     reset();
+    setOpen(false);
   };
 
   useEffect(() => {
@@ -87,7 +93,7 @@ const ProjectDetails = () => {
                     )}
 
                     {/* Invite Dialog */}
-                    <Dialog>
+                    <Dialog open={open} onOpenChange={setOpen}>
                       <DialogTrigger asChild>
                         <Button
                           size="sm"

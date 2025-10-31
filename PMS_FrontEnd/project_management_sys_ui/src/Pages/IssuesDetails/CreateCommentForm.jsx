@@ -2,8 +2,10 @@ import { PaperPlaneIcon } from "@radix-ui/react-icons";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useDispatch } from "react-redux";
+import { createComment } from "../../redux/comments/comAction";
 
-const CreateCommentForm = ({ onNewComment }) => {
+const CreateCommentForm = ({issueId }) => {
   const {
     register,
     handleSubmit,
@@ -11,9 +13,14 @@ const CreateCommentForm = ({ onNewComment }) => {
     reset,
   } = useForm({ defaultValues: { comment: "" } });
 
+
+  const dispatch=useDispatch()
+
   const onSubmit = (data) => {
-    if (onNewComment) onNewComment(data.comment);
+
+    dispatch(createComment({content:data.comment,issueId}))
     reset();
+
   };
 
   return (

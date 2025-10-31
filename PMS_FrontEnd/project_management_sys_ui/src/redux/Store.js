@@ -8,6 +8,7 @@ import authReducer from './Auth/Reducer'
 import commentReducer from './comments/CommentReducer'
 import issueReducer from './Issue/IssueReducer'
 import subscriptionReducer from './subscription/SubscriptionReducer'
+import PaymentReducer from './payment/PaymentReducer'
 
 
 const rootReducer=combineReducers(
@@ -17,7 +18,8 @@ const rootReducer=combineReducers(
         chat:chatReducer,
         comment:commentReducer,
         issue:issueReducer,
-        subscription:subscriptionReducer
+        subscription:subscriptionReducer,
+        payment:PaymentReducer
     }
 )
 

@@ -2,8 +2,12 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Input } from "@/components/ui/input"
 import { Button } from "../../components/ui/button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { PaperPlaneIcon } from "@radix-ui/react-icons"
+import {useDispatch, useSelector} from "react-redux"
+import { fetchChatByProject, fetchChatMessages, sendMessage } from "../../redux/chat/Chatactions"
+import {useParams} from"react-router-dom"
+
 
 const ChatBox = () => {
   const messages = [
@@ -16,6 +20,10 @@ const ChatBox = () => {
 
   const[message,setMessage]=useState("");
 
+  const {auth,chat}=useSelector(store=>store)
+  const dispatch=useDispatch()
+  const {id}=useParams()
+
   const handleMessageChange=(e)=>
   {
     setMessage(e.target.value)
@@ -24,11 +32,26 @@ const ChatBox = () => {
 
   const handleSendMessage=()=>
   {
-    if (!message.trim()) return // skip empty messages
-    setMessage([...messages, message])
+    dispatch(sendMessage({senderId:auth.user?.id,
+      projectId:id, content:message
+    }))
     console.log("Message:", message)
     setMessage("")
   }
+
+
+  useEffect(()=>
+  {
+    dispatch(fetchChatByProject(id))
+  },[id])
+
+
+  useEffect(()=>
+  {
+    if (chat.chat?.id) {
+    dispatch(fetchChatMessages(chat.chat.id))
+    }
+  },[chat.chat?.id])
   return (
     <div className="w-full max-w-md border rounded-lg bg-[#0b1120]/80 text-white">
       {/* Header */}
@@ -36,8 +59,10 @@ const ChatBox = () => {
 
       {/* Scrollable Area */}
       <ScrollArea className="h-[30rem] w-full p-4">
-        {messages.map((text, index) => {
-          const isRight = index % 2 === 0 // ✅ alternate side
+        {chat.messages.map((item, index) => {
+          
+          const isRight = item.sender.id == auth.user.id; // ✅ alternate side
+          
           return (
             <div
               key={index}
@@ -52,7 +77,7 @@ const ChatBox = () => {
                     isRight ? "bg-gray-700" : "bg-gray-700"
                   } text-white`}
                 >
-                  {isRight ? "Y" : "V"}
+                  {isRight ? `${auth.user.name[0].toUpperCase()}` : `${item.sender.name[0].toUpperCase()}`}
                 </AvatarFallback>
               </Avatar>
 
@@ -65,9 +90,9 @@ const ChatBox = () => {
                 }`}
               >
                 <p className="font-semibold text-sm">
-                  {isRight ? "You" : "Vikki"}
+                  {isRight ? "you" : `${item.sender.name}`}
                 </p>
-                <p className="text-gray-200 text-sm">{text}</p>
+                <p className="text-gray-200 text-sm">{item.content}</p>
               </div>
             </div>
           )

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {useDispatch} from "react-redux"
@@ -6,6 +6,9 @@ import {registerUser} from "../../redux/Auth/Action"
 
 
 const Register = ({ toggleForm }) => {
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
   const dispatch=useDispatch()
   const {
     register,
@@ -14,11 +17,27 @@ const Register = ({ toggleForm }) => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Register Data:", data);
-    // handle registration logic here
-    dispatch(registerUser(data));
-  };
+  const onSubmit = async (data) => {
+  setIsSubmitting(true);
+  setSuccessMsg("");
+
+  try {
+    const response = await dispatch(registerUser(data));
+
+    if (response.success) {
+      setSuccessMsg("Registration successful! Redirecting to login...");
+      setTimeout(() => toggleForm(), 2000); // switch to login form
+    } else {
+      setSuccessMsg("Registration failed! Please try again.");
+    }
+  } catch (error) {
+    console.error("Error during registration:", error);
+    setSuccessMsg("Something went wrong. Try again.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   const password = watch("password");
 

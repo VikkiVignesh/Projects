@@ -10,6 +10,8 @@ export const registerUser=userData=>async (dispatch) => {
         dispatch({type:REGISTER_SUCCESS ,payload:data})
 
         console.log("user Registration Success..",data)
+        alert("Registered Successfully , please login in with ur credentials")
+        return { success: true, data };
     } catch (error) {
         console.log(error)
     }

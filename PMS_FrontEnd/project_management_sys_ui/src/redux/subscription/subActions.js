@@ -27,7 +27,7 @@ export const getUserSubscription=(jwt)=>
 }
 
 
-export const upgradeSubscription=({planType})=>
+export const upgradeSubscription=(planType)=>
 {
     return async (dispatch)=>{
         dispatch({type:UPGRADE_SUBSCRIPTION_REQUEST});

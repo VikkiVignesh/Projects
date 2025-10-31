@@ -1,17 +1,17 @@
 import { CREATE_COMMENT_REQUEST, CREATE_COMMENT_SUCCESS, DELETE_COMMENT_REQUEST, DELETE_COMMENT_SUCCESS, FETCH_COMMENT_REQUEST, FETCH_COMMENT_SUCCESS } from "./comActionTypes"
 import api from "../../config/api"
 
-export const createComment=({commentData})=>
+export const createComment=(commentData)=>
 {
     return async (dispatch)=>{
         dispatch({type:CREATE_COMMENT_REQUEST})
         try {
             const response=await api.post(
-              '/api/comments/create',commentData
+              '/api/comment/create',commentData
             );
             console.log("comment created",response.data)
             dispatch({type:CREATE_COMMENT_SUCCESS,
-                comment:response.data,
+                payload:response.data,
             })
         } catch (error) {
             console.log("Comment Creation error ",error)
@@ -20,17 +20,17 @@ export const createComment=({commentData})=>
 }
 
 
-export const deleteComment=({commentId})=>
+export const deleteComment=(id)=>
 {
     return async (dispatch)=>{
         dispatch({type:DELETE_COMMENT_REQUEST})
         try {
-            const response=await api.post(
-              '/api/comments/del/'+commentId
+            const response=await api.delete(
+              '/api/comment/delete/'+id
             );
-            console.log("comment deleted",commentId)
+            console.log("comment deleted",id)
             dispatch({type:DELETE_COMMENT_SUCCESS,
-                commentId,
+                id,
             })
         } catch (error) {
             console.log("Comment Deletion error ",error)
@@ -39,15 +39,15 @@ export const deleteComment=({commentId})=>
 }
 
 
-export const fetchComment=({issueId})=>
+export const fetchComment=(issueId)=>
 {
     return async (dispatch)=>{
         dispatch({type:FETCH_COMMENT_REQUEST})
         try {
-            const response=await api.post(
-              `/api/comments/${issueId}`
+            const response=await api.get(
+              `/api/comment/${issueId}`
             );
-            console.log("Fetched comment ",response.data)
+            console.log("Fetched comments ",response.data)
             dispatch({type:FETCH_COMMENT_SUCCESS,
                 comments:response.data,
             })

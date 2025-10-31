@@ -16,6 +16,8 @@ const Subscription = () => {
       "View-Only Dashboard Access",
       "Email Notifications (Basic)",
     ],
+    planType:"FREE",
+    current:true,
   },
   {
     title: "Monthly Plan",
@@ -29,7 +31,7 @@ const Subscription = () => {
       "Advanced Analytics & Insights",
       "Team Role Management & Permissions",
     ],
-    highlight: true, // highlighted with RGB border
+    planType:"MONTHLY",
   },
   {
     title: "Annual Plan",
@@ -43,6 +45,7 @@ const Subscription = () => {
       "Custom Branding for Workspaces",
       "Dedicated Account Manager",
     ],
+    planType:"ANNUALLY",
   },
 ];
 

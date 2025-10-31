@@ -24,7 +24,7 @@ const commentReducer=(state=initalState,action)=>
             return {
                 ...state,
                 loading:false,
-                comments:[...state.comments,action.comment]
+                comments:[...state.comments,action.payload]
             }
 
         case DELETE_COMMENT_SUCCESS:
@@ -32,7 +32,7 @@ const commentReducer=(state=initalState,action)=>
                 ...state,
                 loading:false,
                 comments:state.comments.filter(
-                    (comment)=> comment.id !==action.commentId
+                    (comment)=> comment.id !==action.id
                 )
             }
         

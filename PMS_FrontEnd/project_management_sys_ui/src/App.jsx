@@ -14,6 +14,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getUser } from './redux/Auth/Action'
 import { store } from './redux/Store'
 import { fetchProjects } from './redux/projects/ProjecActions'
+import UpgradeSuccess from './Pages/Upgrades/UpgradeSuccess'
+import AcceptInvitation from './Pages/Projects/AcceptInvitation'
 
 
 
@@ -50,6 +52,8 @@ function App() {
                 element={<IssueDetails />}
               />
               <Route path="/upgrade_plan" element={<Subscription />} />
+              <Route path="/upgrade_plan/success" element={<UpgradeSuccess/>}/>
+              <Route path="/accept_invitation" element={<AcceptInvitation/>}/>
             </Routes>
           </main>
         </div>
